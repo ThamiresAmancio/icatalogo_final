@@ -58,6 +58,13 @@
   font-size: 26px;
 }
 
+.card-produto section .preco > em{
+  font-size: 13px;
+  color: green;
+  text-decoration: line-through;
+}
+
+
 .card-produto section .parcelamento {
   font-size: 14px;
 }

@@ -58,7 +58,7 @@
                      while($descricao = mysqli_fetch_array($resultado)){
                 ?>
                 <div class="card-categorias">
-                        <?=$descricao["descricao"]?>0
+                        <?=$descricao["descricao"]?>
                         <form method="POST" action="./actionsCategoria.php">
                         <input  type="hidden" name="acao" value="deletar"/>
                         <input  type="hidden" name="id" value="<?=$descricao["id"]?>"/>

@@ -1,9 +1,23 @@
 <?php
 require("../database/conexao.php");
 
-$sql = "SELECT p. *, c.descricao as categoria FROM tbl_produto p 
-INNER JOIN tbl_categoria c ON p.categoria_id = c.id ORDER BY p.id DESC";
+$pesquisa = isset($_GET["p"]) ? $_GET["p"] : null;
 
+
+// echo $pesquisar;
+// $pesquisar = $_GET["pesquisar"];
+
+if($pesquisa){
+    $sql = "SELECT p. *, c.descricao as categoria FROM tbl_produto p
+    INNER JOIN tbl_categoria c ON p.categoria_id = c.id WHERE p.descricao LIKE '%$pesquisa%' 
+    OR c.descricao LIKE '%$pesquisa%'";
+
+
+    }else{
+    $sql = "SELECT p. *, c.descricao as categoria FROM tbl_produto p 
+    INNER JOIN tbl_categoria c ON p.categoria_id = c.id ORDER BY p.id DESC";
+
+}
 $resultado = mysqli_query($conexao,$sql) or die(mysqli_error($conexao));
 
 ?>
@@ -51,20 +65,49 @@ $resultado = mysqli_query($conexao,$sql) or die(mysqli_error($conexao));
             <main>
                     <?php
                         while($produto = mysqli_fetch_array($resultado)){
+                             
+                            $valor = $produto["valor"];
+                            $desconto = $produto["desconto"];
+
+                            if($desconto > 0){
+                                $valorDesconto = ($desconto/100) * $valor;
+                            }
+
                             $quantidadeParcelas = $produto["valor"] > 1000 ? 15 : 6;
-                            $valorParcela = $produto["desconto"] / $quantidadeParcelas;
-                            $descontoValor = $produto["valor"] - $produto["desconto"];
+                            $valorComDesconto = $valor - $valorDesconto;
+                            $valorParcela = $valorComDesconto / $quantidadeParcelas;
+                            
+
+
+    
                     ?>
                 <article class="card-produto">
                      <figure>
                         <img src="produto/<?=$produto["imagem"]?>">
                     </figure>
                     <section>
-                        <span class="preco" valu> R$<?=number_format ($produto["valor"],2,",",".")?></span>
-                        <span class="parcelamento">ou em <em><?= $quantidadeParcelas?> x R$ <?= number_format($valorParcela,2,",",".")?> sem juros</em></span>
-                        <span class="desconto"> Com Desconto:<?=$descontoValor?><style></style></span>
-                        <span class="descricao"><?=$produto["descricao"]?></span>
-                        <span class="categoria"><em><?=$produto["categoria"]?></span></em>
+                        <form method="POST" action="./productsActions.php">
+                            <input type="hidden" value="deletar" name="acao"/>
+
+                            <input  type="hidden" name="id" value="<?=$produto["id"]?>"/>
+
+                            <span class="preco" > R$<?=number_format ($valorComDesconto,2,",",".")?><em><?=$desconto?>%</em></span>
+                            <br></br>
+                            <span class="parcelamento">ou em <em><?= $quantidadeParcelas?> x R$ <?= number_format($valorParcela,2,",",".")?> sem juros</em></span>
+                            <br></br>
+                            <span class="descricao"><?=$produto["descricao"]?></span>
+                            <br></br>
+
+                            <span class="categoria"><em><?=$produto["categoria"]?></span></em>
+                            <br></br>
+                            <?php
+                                if(isset($_SESSION["usuarioId"])){
+                            ?>
+                            <button>&#128465;</button>
+                            <?php
+                                }
+                            ?>
+                        </form>
                     </section> 
                     <footer>
 

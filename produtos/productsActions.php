@@ -135,6 +135,27 @@ switch ($_POST["acao"]) {
         //redirecionamos para a página de listagem       
          header("location: index.php");
         break;
+
+
+
+        case "deletar":
+
+            $id = $_POST["id"];
+
+            $sqlDelete = "DELETE FROM tbl_produto WHERE id = $id";
+
+            $resultado = mysqli_query($conexao,$sqlDelete);
+
+            if($resultado){
+                $_SESSION["mensagem"] = "Categoria deletado com sucesso";
+            }else{
+                $_SESSION["mensagem"] = "Categoria não deletada";
+
+            }
+
+            header("location:index.php");
+    
+            break;
 }
 
 ?>
