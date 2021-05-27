@@ -2,26 +2,26 @@
 session_start();
 ?>
 <link rel="stylesheet" href="/web-backend/icatalogo-parte1/componentes/header/header.css">
-<div class="mensagens">
+<?php
+    if(isset($_SESSION["mensagem"])){
+?>       
+    <div class="mensagens">
+        <?=   $_SESSION["mensagem"];?>
+    </div>
+        <script lang="javasrcipt">
+            setTimeout(() => {
+                document.querySelector(".mensagens").style.display = "none";
+            },4000);
+        </script>
     <?php
-    
-        if(isset($_SESSION["erros"])){
-            echo $_SESSION["erros"][0];
-        }
-
-        if(isset($_SESSION["mensagem"])){
-            echo $_SESSION["mensagem"];
-        }
-
         unset($_SESSION["mensagem"]);
-        unset($_SESSION["erros"]);
-
+         }
     ?>
-
-</div>
 <header class="header">
     <figure>
-        <img src="/web-backend/icatalogo-parte1/imgs/logo.png">
+        <!-- <a href="/web-backend/icatalogo-parte1/produtos"> -->
+         <img src="/web-backend/icatalogo-parte1/imgs/logo.png">
+    <!-- </a> -->
     </figure>
     <input type="search" placeholder="Pesquisar" />
     <nav>

@@ -84,3 +84,9 @@
   font-size: 16px;
   color: var(--textSecundary);
 }
+
+.card-produto section .desconto  {
+  color: var(--accentSecondary);
+  font-style: normal;
+  margin-top: 10px;
+}

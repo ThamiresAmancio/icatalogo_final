@@ -24,18 +24,18 @@ $resultado = mysqli_query($conexao, $sql);
   <?php
   include("../../componentes/header/header.php");
 
-  //  if (isset($_SESSION["usuarioId"])) {
+    // if (isset($_SESSION["usuarioId"])) {
 
-  //    //redireciona para a página de produtos com mensagem de erro
-  //    $_SESSION["mensagem"] = "Você precisa fazer login para acessar essa página.";
+    //   //redireciona para a página de produtos com mensagem de erro
+    //   $_SESSION["mensagem"] = "Você precisa fazer login para acessar essa página.";
 
-  //    header("location: ../index.php");
-  //  }
+    //   header("location: ../index.php");
+    // }
   ?>
   <div class="content">
     <section class="produtos-container">
       <main>
-        <form class="form-produto" method="POST" action="../acoes.php" enctype="multipart/form-data">
+        <form class="form-produto" method="POST" action="../productsActions.php" enctype="multipart/form-data">
           <input type="hidden" name="acao" value="inserir" />
           <h1>Cadastro de produto</h1>
           <ul>
@@ -99,7 +99,7 @@ $resultado = mysqli_query($conexao, $sql);
             <input type="file" name="foto" id="foto" accept="image/*" />
           </div>
           <button onclick="javascript:window.location.href = '../'">Cancelar</button>
-          <button>Salvar</button>
+          <button >Salvar</button>
         </form>
       </main>
     </section>
