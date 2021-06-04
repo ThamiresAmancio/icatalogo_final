@@ -37,7 +37,7 @@ switch($_POST["acao"]){
 
         //verificar se o usuario existe e se a senha está correta
         if(!$usuario || password_verify($senha,$usuario["senha"])){
-            $erros[] = "Usuário e/ou senha inválidos";
+            $erros = "Usuário e/ou senha inválidos";
 
             $_SESSION["erros"] = $erros;
         }else{

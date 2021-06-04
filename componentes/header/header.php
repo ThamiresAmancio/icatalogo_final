@@ -1,10 +1,5 @@
 <?php
 session_start();
-
-
-
-
-
 ?>
 <link rel="stylesheet" href="/web-backend/icatalogo-parte1/componentes/header/header.css">
 <?php
@@ -30,8 +25,20 @@ if (isset($_SESSION["mensagem"])) {
     </figure>
 
     <form method="GET" action="/web-backend/icatalogo-parte1/produtos/index.php">
-        <input type="text" name="p" placeholder="Pesquisar" />
-        <button><img src="/web-backend/icatalogo-parte1/imgs/lupa-de-pesquisa.svg"></button>
+        <input id="pesquisar" type="text" name="p" value="<?= isset($_GET["p"]) ? $_GET["p"] : ""?>" placeholder="Pesquisar" />
+        <button <?= isset($_GET["p"]) && $_GET["p"] != "" ? "onclick='limparFiltro()'" : ""?>>
+        <?php
+        if(isset($_GET["p"]) && $_GET["p"] != ""){
+        ?>
+            <img  style="width: 15px" src="/web-backend/icatalogo-parte1/imgs/close.svg">
+        <?php
+        }else{
+        ?>
+        <img src="/web-backend/icatalogo-parte1/imgs/lupa-de-pesquisa.svg">
+        <?php
+            }
+        ?>
+        </button>
     </form>
     <nav>
         <?php
@@ -93,5 +100,9 @@ if (isset($_SESSION["mensagem"])) {
             containerLogin.style.opacity = 0;
             containerLogin.style.height = "0px";
         }
+    }
+
+    function limparFiltro() {
+        document.querySelector('#pesquisar').value = "";
     }
 </script>

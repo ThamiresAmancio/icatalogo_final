@@ -1,24 +1,16 @@
 <?php
 require("../database/conexao.php");
 
-$pesquisa = isset($_GET["p"]) ? $_GET["p"] : null;
+$sql = " SELECT p.*, c.descricao as categoria FROM tbl_produto p
+         INNER JOIN tbl_categoria c ON p.categoria_id = c.id
+         ORDER BY p.id DESC ";
 
-
-// echo $pesquisar;
-// $pesquisar = $_GET["pesquisar"];
-
-if($pesquisa){
-    $sql = "SELECT p. *, c.descricao as categoria FROM tbl_produto p
-    INNER JOIN tbl_categoria c ON p.categoria_id = c.id WHERE p.descricao LIKE '%$pesquisa%' 
-    OR c.descricao LIKE '%$pesquisa%'";
-
-
-    }else{
-    $sql = "SELECT p. *, c.descricao as categoria FROM tbl_produto p 
-    INNER JOIN tbl_categoria c ON p.categoria_id = c.id ORDER BY p.id DESC";
-
+if(isset($_GET["p"]) && $_GET["p"] != ""){
+    $p = $_GET["p"];
+    $sql .= "WHERE p.descricao LIKE '%$p%' OR c.descricao LIKE '%$p%'";
 }
-$resultado = mysqli_query($conexao,$sql) or die(mysqli_error($conexao));
+
+$resultado = mysqli_query($conexao, $sql) or die(mysqli_error($conexao));
 
 ?>
 <!DOCTYPE html>
@@ -60,62 +52,63 @@ $resultado = mysqli_query($conexao,$sql) or die(mysqli_error($conexao));
                 <button type="button" onclick="javascript:window.location.href ='../categorias/'">Adicionar Categoria</button>
             </header>
             <?php
-            }
+                }
             ?>
             <main>
-                    <?php
-                        while($produto = mysqli_fetch_array($resultado)){
-                             
-                            $valor = $produto["valor"];
-                            $desconto = $produto["desconto"];
+            <?php
+                while ($produto = mysqli_fetch_array($resultado)) {
+                    $valor = $produto["valor"];
+                    $desconto = $produto["desconto"];
 
-                            if($desconto > 0){
-                                $valorDesconto = ($desconto/100) * $valor;
-                            }
+                    $valorDesconto = 0;
 
-                            $quantidadeParcelas = $produto["valor"] > 1000 ? 15 : 6;
-                            $valorComDesconto = $valor - $valorDesconto;
-                            $valorParcela = $valorComDesconto / $quantidadeParcelas;
-                            
+                    if ($desconto > 0) {
+                        $valorDesconto = ($desconto / 100) * $valor;
+                    }
+
+                    $qntdParcelas = $valor > 1000 ? 12 : 6;
+                    $valorComDesconto = $valor - $valorDesconto;
+                    $valorParcela = $valorComDesconto / $qntdParcelas;
 
 
-    
-                    ?>
+                ?>
                 <article class="card-produto">
+                <?php
+                    if(isset($_SESSION["usuarioId"])){
+                        
+                        ?>
+                        <div class="acoes-produtos">
+                            <img onclick="deletar(<?= $produto['id'] ?>)" src="../imgs/delete.svg" />
+                            <img onclick="javascript: window.location = './editar/?id=<?= $produto['id'] ?>'" src="../imgs/pencil.svg" />
+                        </div>
+                        <?php
+                        }
+                        ?>
                      <figure>
                         <img src="produto/<?=$produto["imagem"]?>">
                     </figure>
                     <section>
-                        <form method="POST" action="./productsActions.php">
-                            <input type="hidden" value="deletar" name="acao"/>
-
-                            <input  type="hidden" name="id" value="<?=$produto["id"]?>"/>
-
                             <span class="preco" > R$<?=number_format ($valorComDesconto,2,",",".")?><em><?=$desconto?>%</em></span>
-                            <br></br>
-                            <span class="parcelamento">ou em <em><?= $quantidadeParcelas?> x R$ <?= number_format($valorParcela,2,",",".")?> sem juros</em></span>
-                            <br></br>
+                            
+                            <span class="parcelamento">ou em <em><?= $qntdParcelas?> x R$ <?= number_format($valorParcela,2,",",".")?> sem juros</em></span>
+                            
                             <span class="descricao"><?=$produto["descricao"]?></span>
-                            <br></br>
-
+                            
                             <span class="categoria"><em><?=$produto["categoria"]?></span></em>
-                            <br></br>
-                            <?php
-                                if(isset($_SESSION["usuarioId"])){
-                            ?>
-                            <button>&#128465;</button>
-                            <?php
-                                }
-                            ?>
-                        </form>
+                            
+                       </form>
                     </section> 
                     <footer>
 
                     </footer>
                 </article>
                 <?php
-                    }
+                }
                 ?>
+                <form id="formDeletar" method="POST" action="./productsActions.php">
+                    <input type="hidden" name="acao" value="deletar" />
+                    <input type="hidden" name="produtoId" id="produtoId" />
+                </form>
             </main>
 
         </section>
@@ -123,6 +116,13 @@ $resultado = mysqli_query($conexao,$sql) or die(mysqli_error($conexao));
     <footer>
         SENAI 2021 - Todos os direitos reservados
     </footer>
+    <script lang="javascript">
+        function deletar(produtoId){
+            if(confirm("Tem certeza que deseja deletar este produto?")){
+                document.querySelector("#produtoId").value = produtoId;
+                document.querySelector("#formDeletar").submit();
+            }
+        }
+    </script>
 </body>
-
 </html>
