@@ -107,7 +107,13 @@
   position:absolute;
   right: 10px;
   top:10px;
-
+  display: flex;
+  padding: 5px 10px;
+  justify-content: center ;
+  background-color: var(--overlay);
+  border-radius: 6px;
+  z-index: 1;
+  gap: 10px;
 }
 
 

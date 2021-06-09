@@ -1,7 +1,7 @@
 <?php
 session_start();
 ?>
-<link rel="stylesheet" href="/web-backend/icatalogo-parte1/componentes/header/header.css">
+<link rel="stylesheet" href="/componentes/header/header.css">
 <?php
 if (isset($_SESSION["mensagem"])) {
 ?>
@@ -20,21 +20,21 @@ if (isset($_SESSION["mensagem"])) {
 <header class="header">
     <figure>
         <!-- <a href="/web-backend/icatalogo-parte1/produtos"> -->
-        <img src="/web-backend/icatalogo-parte1/imgs/logo.png">
+        <img src="/imgs/logo.png">
         <!-- </a> -->
     </figure>
 
-    <form method="GET" action="/web-backend/icatalogo-parte1/produtos/index.php">
+    <form method="GET" action="/produtos/index.php">
         <input id="pesquisar" type="text" name="p" value="<?= isset($_GET["p"]) ? $_GET["p"] : ""?>" placeholder="Pesquisar" />
         <button <?= isset($_GET["p"]) && $_GET["p"] != "" ? "onclick='limparFiltro()'" : ""?>>
         <?php
         if(isset($_GET["p"]) && $_GET["p"] != ""){
         ?>
-            <img  style="width: 15px" src="/web-backend/icatalogo-parte1/imgs/close.svg">
+            <img  style="width: 15px" src="/imgs/close.svg">
         <?php
         }else{
         ?>
-        <img src="/web-backend/icatalogo-parte1/imgs/lupa-de-pesquisa.svg">
+        <img src="/imgs/lupa-de-pesquisa.svg">
         <?php
             }
         ?>
@@ -53,7 +53,7 @@ if (isset($_SESSION["mensagem"])) {
     <div id="container-login" class="container-login">
 
         <h1>fazer login</h1>
-        <form method="POST" action="/web-backend/icatalogo-parte1/componentes/header/acoes.php">
+        <form method="POST" action="/componentes/header/acoes.php">
             <input type="hidden" name="acao" value="login">
             <input type="text" name="usuario" placeholder="Usuário">
             <input type="password" name="senha" placeholder="Senha">
@@ -68,7 +68,7 @@ if (isset($_SESSION["mensagem"])) {
             <a id="menu-admin" onclick="logout()"> Sair </a>
         </ul>
     </nav>
-    <form id="form-logout" style="display: none;" method="POST" action="/web-backend/icatalogo-parte1/componentes/header/acoes.php">
+    <form id="form-logout" style="display: none;" method="POST" action="/componentes/header/acoes.php">
         <input type="hidden" name="acao" value="logout">
     </form>
     <!--  Tinha faltado fechar esse form... dessa forma todos os buttons pertenciam a esse form e enviavam para logout -->

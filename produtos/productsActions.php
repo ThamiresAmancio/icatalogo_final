@@ -228,70 +228,69 @@ switch ($_POST["acao"]) {
         header("location: index.php");
 
         break;
+    
+            case "editar":
 
-
-        case "editar":
-
-            $erros = validarCamposEditar();
-    
-            if (count($erros) > 0) {
-                $_SESSION["erros"] = $erros;
-    
-                header("location: editar/index.php");
-    
-                exit();
-            }
-    
-            $produtoId = $_POST["produtoId"];
-    
-            if ($_FILES["foto"]["error"] != UPLOAD_ERR_NO_FILE) {
-                $sql = " SELECT imagem FROM tbl_produto WHERE id = $produtoId ";
-                $resultado = mysqli_query($conexao, $sql);
-                $produto = mysqli_fetch_array($resultado);
-    
-                unlink("./produto/" . $produto["imagem"]);
-    
-                //pegamos o nome original do arquivo
-                $nomeArquivo = $_FILES["foto"]["name"];
-    
-                //extraímos do nome original a extensão
-                $extensao = pathinfo($nomeArquivo, PATHINFO_EXTENSION); //jpg ou png ou gif ... 
-    
-                //geramos um novo nome único utilizando o unix timestamp
-                $novoNomeArquivo = md5(microtime()) . ".$extensao";
-    
-                //movemos a foto para a pasta fotos dentro de produtos
-                move_uploaded_file($_FILES["foto"]["tmp_name"], "produto/$novoNomeArquivo");
-            }
-    
-            $descricao = $_POST["descricao"];
-            $peso = str_replace(",", ".", $_POST["peso"]);
-            $quantidade = $_POST["quantidade"];
-            $cor = $_POST["cor"];
-            $tamanho = $_POST["tamanho"];
-            $valor = str_replace(",", ".", $_POST["valor"]);
-            $desconto = $_POST["desconto"] != "" ? $_POST["desconto"] : 0;
-            $categoriaId = $_POST["categoria"];
-    
-            $sqlUpdate = " UPDATE tbl_produto SET descricao = '$descricao', peso = $peso, quantidade = $quantidade, cor = '$cor', tamanho = '$tamanho', valor = $valor, desconto = $desconto, categoria_id = $categoriaId";
-    
-            $sqlUpdate .= $novoNomeArquivo ? " , imagem = $novoNomeArquivo" : "";
-    
-            $sqlUpdate .= " WHERE id = $produtoId ";
-    
-            $resultado = mysqli_query($conexao, $sqlUpdate) or die(mysqli_error($conexao));
-    
-            if ($resultado) {
-                $mensagem = "Produto editado com sucesso!";
-            } else {
-                $mensagem = "Ops, erro ao editar o produto!";
-            }
-    
-            $_SESSION["mensagem"] = $mensagem;
-    
-            header("location: index.php");
-    
-            break;
+                $erros = validarCamposEditar();
+        
+                if (count($erros) > 0) {
+                    $_SESSION["erros"] = $erros;
+        
+                    header("location: editar/index.php");
+        
+                    exit();
+                }
+        
+                $produtoId = $_POST["produtoId"];
+        
+                if ($_FILES["foto"]["error"] != UPLOAD_ERR_NO_FILE) {
+                    $sql = " SELECT imagem FROM tbl_produto WHERE id = $produtoId ";
+                    $resultado = mysqli_query($conexao, $sql);
+                    $produto = mysqli_fetch_array($resultado);
+        
+                    unlink("./produto/" . $produto["imagem"]);
+        
+                    //pegamos o nome original do arquivo
+                    $nomeArquivo = $_FILES["foto"]["name"];
+        
+                    //extraímos do nome original a extensão
+                    $extensao = pathinfo($nomeArquivo, PATHINFO_EXTENSION); //jpg ou png ou gif ... 
+        
+                    //geramos um novo nome único utilizando o unix timestamp
+                    $novoNomeArquivo = md5(microtime()) . ".$extensao";
+        
+                    //movemos a foto para a pasta fotos dentro de produtos
+                    move_uploaded_file($_FILES["foto"]["tmp_name"], "fotos/$novoNomeArquivo");
+                }
+        
+                $descricao = $_POST["descricao"];
+                $peso = str_replace(",", ".", $_POST["peso"]);
+                $quantidade = $_POST["quantidade"];
+                $cor = $_POST["cor"];
+                $tamanho = $_POST["tamanho"];
+                $valor = str_replace(",", ".", $_POST["valor"]);
+                $desconto = $_POST["desconto"] != "" ? $_POST["desconto"] : 0;
+                $categoriaId = $_POST["categoria"];
+        
+                $sqlUpdate = " UPDATE tbl_produto SET descricao = '$descricao', peso = $peso, quantidade = $quantidade, cor = '$cor', tamanho = '$tamanho', valor = $valor, desconto = $desconto, categoria_id = $categoriaId";
+        
+                $sqlUpdate .= $novoNomeArquivo ? " , imagem = $novoNomeArquivo" : "";
+        
+                $sqlUpdate .= " WHERE id = $produtoId ";
+        
+                $resultado = mysqli_query($conexao, $sqlUpdate) or die(mysqli_error($conexao));
+        
+                if ($resultado) {
+                    $mensagem = "Produto editado com sucesso!";
+                } else {
+                    $mensagem = "Ops, erro ao editar o produto!";
+                }
+        
+                $_SESSION["mensagem"] = $mensagem;
+        
+                header("location: index.php");
+        
+                break;
     
 }
 

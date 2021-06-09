@@ -16,10 +16,10 @@ if(!$produto){
   exit();
 }
 
+
 $sql = " SELECT * FROM tbl_categoria ";
 
-$resultado = mysqli_query($conexao, $sql);
-
+$resultado = mysqli_query($conexao, $sql) or die(mysqli_error($conexao));
 
 ?>
 
@@ -31,7 +31,7 @@ $resultado = mysqli_query($conexao, $sql);
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../../styles-global.css" />
   <link rel="stylesheet" href="./editar.css" />
-  <title>Administrar Produtos</title>
+  <title>Editar Produtos</title>
 </head>
 
 <body>
@@ -50,9 +50,10 @@ $resultado = mysqli_query($conexao, $sql);
   <div class="content">
     <section class="produtos-container">
       <main>
-        <form class="form-produto" method="POST" action="../productsActions.php" enctype="multipart/form-data">
-          <input type="hidden" name="acao" value="inserir" />
-          <h1> Editar produto</h1>
+          <form class="form-produto" method="POST" action="../productsActions.php" enctype="multipart/form-data">
+          <input type="hidden" name="acao" value="editar" />
+          <input type="hidden" name="produtoId" value="<?= $produto["id"] ?>" />
+          <h1>Editar produto</h1>
           <ul>
             <?php
             //verifica se existe erros na sessão do usuário
@@ -74,7 +75,7 @@ $resultado = mysqli_query($conexao, $sql);
           </div>
           <div class="input-group">
             <label for="peso">Peso</label>
-            <input type="text" name="peso" id="peso" value="<?= $produto["peso"] ?>" required>
+            <input type="text" name="peso" id="peso" value="<?= number_format($produto["peso"],2,",","." )?>" required>
           </div>
           <div class="input-group">
             <label for="quantidade">Quantidade</label>
